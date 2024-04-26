@@ -31,6 +31,10 @@ func MessageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 		session.ChannelMessageSend(message.ChannelID, "That's my line!, Anyway, Pong!")
 	}
 
+	if messageContent == "namastey" {
+		session.ChannelMessageSend(message.ChannelID, "Namastey!")
+	}
+
 }
 
 func AssignRoleOnUserJoin(session *discordgo.Session, event *discordgo.GuildMemberAdd) {
