@@ -9,7 +9,7 @@ import (
 )
 
 func Ready(session *discordgo.Session, event *discordgo.Ready) {
-	session.UpdateListeningStatus("Namastey")
+	session.UpdateListeningStatus("You")
 	fmt.Println(session.State.User.Username + " is online!")
 }
 
@@ -38,14 +38,15 @@ func MessageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 }
 
 func AssignRoleOnUserJoin(session *discordgo.Session, event *discordgo.GuildMemberAdd) {
-	guildID := event.GuildID
-	memberID := event.Member.User.ID
+	guildID := os.Getenv("DISCORD_GUILD_ID")
 	roleID := os.Getenv("DISCORD_ROLE_ID")
-	fmt.Println("Assigning role to user: ", memberID)
+	memberID := event.User.ID
+	fmt.Println("Assigning role to user: ", session.State.User.Username)
 	err := session.GuildMemberRoleAdd(guildID, memberID, roleID)
 	if err != nil {
 		fmt.Println("Error assigning role to user: ", err)
 	}
+	session.ChannelMessageSend(os.Getenv("DISCORD_WELCOME_CHANNEL_ID"), fmt.Sprintf("Welcome %v to the server! You have been assigned the role : %v", event.User.Username, os.Getenv("DISCORD_ROLE_NAME")))
 }
 
 func AssignRoleByUserId(session *discordgo.Session, guildID string, memberID string, roleID string) {
